@@ -6,27 +6,26 @@ public class TankMovement : MonoBehaviour
 {
     public float speed;
     public float rotateSpeed;
-    public float turrentRotateSpeed;
-    private Transform tankTurrent;
+    public float turretRotateSpeed;
+    private Transform tankTurret;
     void Awake(){
-        tankTurrent = transform.Find("TankRenderers/TankTurret");
+        tankTurret = transform.Find("TankRenderers/TankTurret");
     }
     
     public void HandleMovementToPosition(Vector3 targetPosition){
-       Vector3 _moveDirection = targetPosition - transform.position;
-    //    if (Vector3.Distance(targetPosition, transform.position) < 0.5f) return;
-       _moveDirection.y = 0;
-       Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * speed);
-       transform.position = newPosition;
-       _moveDirection.Normalize();
-
-       HandleRotation(_moveDirection);
+        Vector3 _moveDirection = targetPosition - transform.position;
+        //    if (Vector3.Distance(targetPosition, transform.position) < 0.1f) return;
+        _moveDirection.y = 0;
+        Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * speed);
+        transform.position = newPosition;
+        _moveDirection.Normalize();
+        HandleRotation(_moveDirection);
     }
 
-    public void HandleTurrentAngle(float r){
+    public void HandleTurretAngle(float r){
         Quaternion targetRotation = Quaternion.Euler(0, r, 0);
-        Quaternion newRotation = Quaternion.Lerp(tankTurrent.rotation, targetRotation, Time.deltaTime * turrentRotateSpeed);
-        tankTurrent.rotation = targetRotation;
+        Quaternion newRotation = Quaternion.Lerp(tankTurret.rotation, targetRotation, Time.deltaTime * turretRotateSpeed);
+        tankTurret.rotation = targetRotation;
     }
 
     private void HandleRotation(Vector3 _moveDirection){
@@ -34,5 +33,9 @@ public class TankMovement : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(_moveDirection, Vector3.up);
         Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
         transform.rotation = newRotation;
+    }
+
+    public Quaternion GetTurretRotation(){
+        return tankTurret.rotation;
     }
 }

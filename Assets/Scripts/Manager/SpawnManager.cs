@@ -17,8 +17,8 @@ public class SpawnManager : MonoSingleton<SpawnManager>
         }
     }
 
-    public Transform SpawnTank(){
-        GameObject newTank = Instantiate(tankPrefab, Vector3.zero, Quaternion.identity);
+    public Transform SpawnTank(Vector3 position){
+        GameObject newTank = Instantiate(tankPrefab, position, Quaternion.identity);
         newTank.transform.SetParent(_tankContainer.transform);
         return newTank.transform;
     }

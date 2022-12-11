@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TankInfo
 {
+    public int id;
     public Vector3 position;
-    public float turrentAngle;
+    public float turretAngle;
+    public int HP;
+    public int damage;
 }
