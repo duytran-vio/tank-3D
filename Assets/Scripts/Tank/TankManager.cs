@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class TankManager : MonoBehaviour
 {
     public TankInfo tankInfo;
-    public int initHP;
-    public int initDamage;
     private TankMovement tankMovement;
     private GameObject bulletPrefabs;
     private Transform firePoint;
@@ -22,12 +20,8 @@ public class TankManager : MonoBehaviour
     }
 
     public void Init(int id){
-        tankInfo = new TankInfo();
-        tankInfo.id = id;
+        tankInfo = new TankInfo(id);
         tankInfo.position = transform.position;
-        tankInfo.turretAngle = 0;
-        tankInfo.HP = initHP;
-        tankInfo.damage = initDamage;
         healthBar.maxValue = tankInfo.HP;
         healthBar.value = tankInfo.HP;
     }

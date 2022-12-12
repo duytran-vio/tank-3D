@@ -35,6 +35,7 @@ public class InputManager : MonoSingleton<InputManager>
     private void HandleMovementInput(){
         float verticalInput = Input.GetAxisRaw("Vertical"); 
         float horizontalInput = Input.GetAxisRaw("Horizontal");
+        if (verticalInput == 0 && horizontalInput == 0) return;
         Vector3 moveDir = new Vector3(horizontalInput, 0, verticalInput) * Time.deltaTime * speed;
         
         GameManager.Instance.MoveMainTank(mainTankInfo.position + moveDir);
