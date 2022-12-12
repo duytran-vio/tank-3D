@@ -59,7 +59,7 @@ public class MenuManager : MonoBehaviourPunCallbacks
         _2PBackBtnObj = _2PMenu.Find("Backbtn");
 
         AddButtonListener(_1PbtnObj, OnClickNewGame);
-        AddButtonListener(_2PbtnObj, Show2PMenu);
+        AddButtonListener(_2PbtnObj, JoinRoom);
         AddButtonListener(_quitBtnObj, OnClickQuitBtn);
 
         // AddButtonListener(_easyBtnObj, OnClickEasyBtn);
@@ -133,7 +133,7 @@ public class MenuManager : MonoBehaviourPunCallbacks
     }
 
     private void OnClickNewGame(){
-        // PlayerPrefs.SetString("FromFile", "");
+        PlayerPrefs.SetInt("isOnline", 0);
         SceneManager.LoadScene("AI Scene");
     }
 
@@ -164,8 +164,9 @@ public class MenuManager : MonoBehaviourPunCallbacks
     }
 
     private void JoinRoom(){
-        var roomId = _joinIdObj.GetComponent<InputField>().text;
-        PhotonNetwork.JoinRoom(roomId);
+        // var roomId = _joinIdObj.GetComponent<InputField>().text;
+        PlayerPrefs.SetInt("isOnline", 1);
+        PhotonNetwork.JoinRoom("1");
     }
 
     public override void OnJoinedRoom()

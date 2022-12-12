@@ -10,6 +10,7 @@ public class CameraManager : MonoSingleton<CameraManager>
     }
 
     void LateUpdate(){
+        if (followTarget == null) return;
         transform.position = followTarget.position;
     }
 }

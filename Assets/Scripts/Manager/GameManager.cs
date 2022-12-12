@@ -5,17 +5,25 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     private Dictionary<int, TankManager> _tanks;
-    private int mainTankIndex;
+    public int mainTankIndex;
+    private bool _isOnline;
 
     void Start(){
         _tanks = new Dictionary<int, TankManager>();
-        AddNewTank(Vector3.zero);
-        mainTankIndex = 0;
-        Init();
-        AddNewTank(new Vector3(5, 0, 5)); // test
+        _isOnline = PlayerPrefs.GetInt("isOnline") == 1;
+        if (!_isOnline){
+            AddNewTank(Vector3.zero);
+            mainTankIndex = 0;
+            Init();
+        }
+        else{
+            Random.InitState(System.DateTime.Now.Millisecond);
+            mainTankIndex = Random.Range(0, 10000);
+            ClientSendRequest.Instance.SendRegisterRequest(mainTankIndex);
+        }
     }
 
-    void Init(){
+    public void Init(){
         InputManager.Instance.Init(GetMainTankInfo());
         CameraManager.Instance.Init(_tanks[mainTankIndex].transform);
     }

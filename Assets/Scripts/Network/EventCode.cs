@@ -1,3 +1,7 @@
 public enum EventCode{
-    REGISTER
+    REGISTER,
+    MOVE,
+    MOVETURRET,
+    FIRE,
+    HIT
 }

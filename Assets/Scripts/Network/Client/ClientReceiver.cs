@@ -4,7 +4,8 @@ using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
-public class ServerReceiver : MonoBehaviour
+
+public class ClientReceiver : MonoBehaviour
 {
     //public const byte (byte)NetworkEvent.PositionEventCode = 1;
 
@@ -35,20 +36,43 @@ public class ServerReceiver : MonoBehaviour
     private void HandleRegisterEvent(EventData photonEvent){
         object[] data = (object[])photonEvent.CustomData;
         int userId = (int)data[0];
-        ServerManager.Instance.Register(userId);
+        int n_tanks = (int)data[1];
+        Dictionary<int, TankInfo> tanks = new Dictionary<int, TankInfo>();
+        int k = 2;
+        for(int i = 0; i < n_tanks; i++){
+            int id = (int)data[k];
+            TankInfo tankInfo = new TankInfo(id);
+            tankInfo.position = (Vector3) data[k + 1];
+            tankInfo.turretAngle = (float)data[k + 2];
+            tankInfo.HP = (int)data[k + 3];
+            tankInfo.damage = (int)data[k + 4];
+            k += 5;
+            tanks.Add(id, tankInfo);
+        }
+        if (userId == GameManager.Instance.mainTankIndex){
+            foreach (var item in tanks){
+                TankManager newTank = GameManager.Instance.AddNewTank(item.Value.position, item.Value.id);
+                newTank.tankInfo = item.Value;
+            }
+            GameManager.Instance.Init();
+        }
+        else{
+            TankManager newTank = GameManager.Instance.AddNewTank(tanks[userId].position, tanks[userId].id);
+            newTank.tankInfo = tanks[userId];
+        }
     }
+
     private void HandleMoveEvent(EventData photonEvent){
         object[] data = (object[])photonEvent.CustomData;
         int userId = (int)data[0];
         Vector3 newPos = (Vector3)data[1];
-        ServerManager.Instance.Move(userId, newPos);
+        GameManager.Instance.MoveTank(userId, newPos);
     }
 
     private void HandleMoveTurretEvent(EventData photonEvent){
         object[] data = (object[])photonEvent.CustomData;
         int userId = (int)data[0];
         float r = (float)data[1];
-        ServerManager.Instance.MoveTurret(userId, r);
+        GameManager.Instance.SetTankTurret(userId, r);
     }
 }
-

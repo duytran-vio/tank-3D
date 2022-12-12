@@ -18,6 +18,16 @@ public class ServerManager : MonoSingleton<ServerManager>
         TankInfo tankInfo = new TankInfo(newId);
         tankInfo.position = GetRandomPosition();
         _tanks.Add(newId, tankInfo);
-        ServerSendReply.Instance.ReplyRegister(newId);
+        ServerSendReply.Instance.ReplyRegister(newId, _tanks);
+    }
+
+    public void Move(int id, Vector3 newPos){
+        _tanks[id].position += newPos;
+        ServerSendReply.Instance.ReplyMoveEvent(id, _tanks[id].position);
+    }
+
+    public void MoveTurret(int id, float r){
+        _tanks[id].turretAngle += r;
+        ServerSendReply.Instance.ReplyMoveTurretEvent(id, _tanks[id].turretAngle);
     }
 }

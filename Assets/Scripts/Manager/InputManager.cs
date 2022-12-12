@@ -7,10 +7,11 @@ public class InputManager : MonoSingleton<InputManager>
     public float speed;
     public float turretSpeed;
     TankInfo mainTankInfo;
+    private bool isOnline;
     // Start is called before the first frame update
     void Start()
     {
-
+        isOnline = PlayerPrefs.GetInt("isOnline") == 1;
     }
 
     public void Init(TankInfo tankInfo){
@@ -22,13 +23,13 @@ public class InputManager : MonoSingleton<InputManager>
     {
         HandleMovementInput();
         if (Input.GetKey(KeyCode.K)){
-            GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle - turretSpeed);
+            SetTankTurret(-turretSpeed);
         }
         if (Input.GetKey(KeyCode.L)){
-            GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle + turretSpeed);
+            SetTankTurret(turretSpeed);
         }
         if (Input.GetKeyDown(KeyCode.J)){
-            GameManager.Instance.FireMainTank(mainTankInfo.turretAngle);
+            Fire(mainTankInfo.turretAngle);
         }
     }
 
@@ -37,7 +38,29 @@ public class InputManager : MonoSingleton<InputManager>
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         if (verticalInput == 0 && horizontalInput == 0) return;
         Vector3 moveDir = new Vector3(horizontalInput, 0, verticalInput) * Time.deltaTime * speed;
-        
-        GameManager.Instance.MoveMainTank(mainTankInfo.position + moveDir);
+        if (isOnline){
+            ClientSendRequest.Instance.SendMoveTank(mainTankInfo.id, moveDir);
+        }
+        else{
+            GameManager.Instance.MoveMainTank(mainTankInfo.position + moveDir);
+        }
+    }
+
+    private void SetTankTurret(float r){
+        if (isOnline){
+            ClientSendRequest.Instance.SendMoveTurret(mainTankInfo.id, r);
+        }
+        else{
+            GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle + r);
+        }
+    }
+
+    private void Fire(float r){
+        if (isOnline){
+
+        }
+        else{
+           GameManager.Instance.FireMainTank(r);
+        }
     }
 }
