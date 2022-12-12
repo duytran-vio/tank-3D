@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TankManager : MonoBehaviour
 {
@@ -10,12 +11,14 @@ public class TankManager : MonoBehaviour
     private TankMovement tankMovement;
     private GameObject bulletPrefabs;
     private Transform firePoint;
+    private Slider  healthBar;
     // Start is called before the first frame update
     void Awake()
     {
         tankMovement = GetComponent<TankMovement>(); 
         bulletPrefabs = Resources.Load<GameObject>("Prefabs/Shell");
         firePoint = transform.Find("TankRenderers/TankTurret/FirePoint");
+        healthBar = transform.Find("Canvas/HealthBar").GetComponent<Slider>();
     }
 
     public void Init(int id){
@@ -25,6 +28,8 @@ public class TankManager : MonoBehaviour
         tankInfo.turretAngle = 0;
         tankInfo.HP = initHP;
         tankInfo.damage = initDamage;
+        healthBar.maxValue = tankInfo.HP;
+        healthBar.value = tankInfo.HP;
     }
 
     // Update is called once per frame
@@ -61,6 +66,11 @@ public class TankManager : MonoBehaviour
         
         GameObject bullet = Instantiate(bulletPrefabs, firePoint.position, tankMovement.GetTurretRotation());
         bullet.GetComponent<BulletManager>().Init(tankInfo.id);
+    }
+
+    public void SetHP(int newHP){
+        tankInfo.HP = newHP;
+        healthBar.value = newHP;
     }
 
     public void Die(){

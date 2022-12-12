@@ -86,12 +86,13 @@ public class GameManager : MonoSingleton<GameManager>
 
         TankInfo sourceInfo = GetTankInfo(sourceIndex);
         TankInfo desInfo = GetTankInfo(desIndex);
-        Debug.Log(desInfo.HP);
+        // Debug.Log(desInfo.HP);
 
-        if (sourceInfo.damage > desInfo.HP){
+        if (sourceInfo.damage >= desInfo.HP){
             TankDie(desIndex);
         }
 
-        desInfo.HP -= sourceInfo.damage;
+        // desInfo.HP -= sourceInfo.damage;
+        _tanks[desIndex].GetComponent<TankManager>().SetHP(desInfo.HP - sourceInfo.damage);
     }
 }
