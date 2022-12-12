@@ -13,7 +13,8 @@ public class InputManager : MonoSingleton<InputManager>
 
     }
 
-    public void Init(TankInfo tankInfo){
+    public void Init(TankInfo tankInfo)
+    {
         mainTankInfo = tankInfo;
     }
 
@@ -21,22 +22,27 @@ public class InputManager : MonoSingleton<InputManager>
     void Update()
     {
         HandleMovementInput();
-        if (Input.GetKey(KeyCode.K)){
+        if (Input.GetKey(KeyCode.K))
+        {
             GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle - turretSpeed);
         }
-        if (Input.GetKey(KeyCode.L)){
+        if (Input.GetKey(KeyCode.L))
+        {
             GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle + turretSpeed);
         }
-        if (Input.GetKeyDown(KeyCode.J)){
+        if (Input.GetKeyDown(KeyCode.J))
+        {
             GameManager.Instance.FireMainTank(mainTankInfo.turretAngle);
         }
     }
 
-    private void HandleMovementInput(){
-        float verticalInput = Input.GetAxisRaw("Vertical"); 
+    private void HandleMovementInput()
+    {
+        float verticalInput = Input.GetAxisRaw("Vertical");
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         Vector3 moveDir = new Vector3(horizontalInput, 0, verticalInput) * Time.deltaTime * speed;
-        
+        //moveDir = Quaternion.Euler(0, mainTankInfo.hullAngle, 0) * moveDir;
+
         GameManager.Instance.MoveMainTank(mainTankInfo.position + moveDir);
     }
 }

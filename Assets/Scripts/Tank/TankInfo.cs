@@ -6,6 +6,7 @@ public class TankInfo
 {
     public int id;
     public Vector3 position;
+    public float hullAngle;
     public float turretAngle;
     public int HP;
     public int damage;
