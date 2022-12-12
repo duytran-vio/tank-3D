@@ -26,7 +26,13 @@ public class BulletManager : MonoBehaviour
         if (other.tag == "Tank"){
             int hitId = other.GetComponent<TankManager>().tankInfo.id;
             if ( hitId == fromTankId) return;
-            GameManager.Instance.Hit(fromTankId, hitId);
+            if (PlayerPrefs.GetInt("isOnline") == 1 ){
+                if (GameManager.Instance.mainTankIndex == fromTankId)
+                    ClientSendRequest.Instance.SendHitEvent(fromTankId, hitId);
+            }
+            else{
+                GameManager.Instance.Hit(fromTankId, hitId);
+            }
         }
         Destroy(gameObject);
     }

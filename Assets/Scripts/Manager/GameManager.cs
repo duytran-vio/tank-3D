@@ -75,12 +75,11 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public void TankDie(int index){
-        if (index >= _tanks.Count) return;
+        if (!_tanks.ContainsKey(index)) return;
         _tanks[index].Die();
     }
 
     public void Hit(int fromId, int toId){
-
         TankInfo sourceInfo = GetTankInfo(fromId);
         TankInfo desInfo = GetTankInfo(toId);
 

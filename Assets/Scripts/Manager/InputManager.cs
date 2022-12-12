@@ -57,10 +57,10 @@ public class InputManager : MonoSingleton<InputManager>
 
     private void Fire(float r){
         if (isOnline){
-
+            ClientSendRequest.Instance.SendTankFire(mainTankInfo.id, r);
         }
         else{
-           GameManager.Instance.FireMainTank(r);
+            GameManager.Instance.FireMainTank(r);
         }
     }
 }

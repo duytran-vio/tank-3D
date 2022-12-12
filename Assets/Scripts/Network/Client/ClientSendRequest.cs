@@ -25,4 +25,16 @@ public class ClientSendRequest : ApiSingleton<ClientSendRequest>
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
         PhotonNetwork.RaiseEvent((byte)EventCode.MOVETURRET, content, raiseEventOptions, SendOptions.SendReliable);
     }
+
+    public void SendTankFire(int id, float r){
+        object[] content = new object[] {id, r};
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+        PhotonNetwork.RaiseEvent((byte)EventCode.FIRE, content, raiseEventOptions, SendOptions.SendReliable);      
+    }
+
+    public void SendHitEvent(int fromId, int toId){
+        object[] content = new object[] {fromId, toId};
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+        PhotonNetwork.RaiseEvent((byte)EventCode.HIT, content, raiseEventOptions, SendOptions.SendReliable);
+    }
 }

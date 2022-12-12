@@ -34,4 +34,16 @@ public class ServerSendReply : ApiSingleton<ServerSendReply>
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
         PhotonNetwork.RaiseEvent((byte)EventCode.MOVETURRET, content, raiseEventOptions, SendOptions.SendReliable);
     }
+
+    public void ReplyTankFireEvent(int id, float r){
+        object[] content = new object[] {id, r};
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((byte)EventCode.FIRE, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void ReplyHitEvent(int fromId, int toId){
+        object[] content = new object[] {fromId, toId};
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent((byte)EventCode.HIT, content, raiseEventOptions, SendOptions.SendReliable);
+    }
 }

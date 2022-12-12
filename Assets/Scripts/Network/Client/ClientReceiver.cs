@@ -31,6 +31,12 @@ public class ClientReceiver : MonoBehaviour
         else if (eventCode == (byte)EventCode.MOVETURRET){
             HandleMoveTurretEvent(photonEvent);
         }
+        else if (eventCode == (byte)EventCode.FIRE){
+            HandleTankFireEvent(photonEvent);
+        }
+        else if (eventCode == (byte)EventCode.HIT){
+            HandleHitEvent(photonEvent);
+        }
     }
 
     private void HandleRegisterEvent(EventData photonEvent){
@@ -74,5 +80,19 @@ public class ClientReceiver : MonoBehaviour
         int userId = (int)data[0];
         float r = (float)data[1];
         GameManager.Instance.SetTankTurret(userId, r);
+    }
+
+    private void HandleTankFireEvent(EventData photonEvent){
+        object[] data = (object[])photonEvent.CustomData;
+        int userId = (int)data[0];
+        float r = (float)data[1];
+        GameManager.Instance.FireTank(userId, r);
+    }
+
+    private void HandleHitEvent(EventData photonEvent){
+        object[] data = (object[])photonEvent.CustomData;
+        int fromId = (int)data[0];
+        int toId = (int)data[1];
+        GameManager.Instance.Hit(fromId, toId);
     }
 }

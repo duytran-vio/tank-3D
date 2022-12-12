@@ -30,4 +30,18 @@ public class ServerManager : MonoSingleton<ServerManager>
         _tanks[id].turretAngle += r;
         ServerSendReply.Instance.ReplyMoveTurretEvent(id, _tanks[id].turretAngle);
     }
+
+    public void Fire(int id, float r){
+        _tanks[id].turretAngle = r;
+        ServerSendReply.Instance.ReplyTankFireEvent(id,  _tanks[id].turretAngle);
+    }
+
+    public void Hit(int fromId, int toId){
+        _tanks[toId].HP -= _tanks[fromId].damage;
+        if (_tanks[toId].HP <= 0){
+            // ServerSendReply.Instance.ReplyDieEvent(toId);
+            _tanks.Remove(toId);
+        }
+        ServerSendReply.Instance.ReplyHitEvent(fromId, toId);
+    }
 }
