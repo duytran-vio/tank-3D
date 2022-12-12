@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    private List<Transform> _tanks;
+    private Dictionary<int, TankManager> _tanks;
     private int mainTankIndex;
 
     void Start(){
-        _tanks = new List<Transform>();
+        _tanks = new Dictionary<int, TankManager>();
         AddNewTank(Vector3.zero);
         mainTankIndex = 0;
         Init();
-        AddNewTank(new Vector3(5, 0, 5));
+        AddNewTank(new Vector3(5, 0, 5)); // test
     }
 
     void Init(){
         InputManager.Instance.Init(GetMainTankInfo());
-        CameraManager.Instance.Init(_tanks[mainTankIndex]);
+        CameraManager.Instance.Init(_tanks[mainTankIndex].transform);
     }
 
-    public Transform AddNewTank(Vector3 position, int newId = -1){
+    public TankManager AddNewTank(Vector3 position, int newId = -1){
         if (newId == -1){
             newId = _tanks.Count;
         }
         Transform newTank = SpawnManager.Instance.SpawnTank(position);
-        _tanks.Add(newTank.transform);
-        newTank.GetComponent<TankManager>().Init(newId);
-        return newTank.transform;
+        _tanks.Add(newId, newTank.GetComponent<TankManager>());
+        _tanks[newId].Init(newId);
+        return _tanks[newId];
     }
 
     public TankInfo GetMainTankInfo(){
@@ -35,8 +35,8 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public TankInfo GetTankInfo(int index){
-        if (index >= _tanks.Count) return null;
-        return _tanks[index].GetComponent<TankManager>().tankInfo;
+        if (!_tanks.ContainsKey(index)) return null;
+        return _tanks[index].tankInfo;
     }
 
     public void MoveMainTank(Vector3 position){
@@ -52,47 +52,35 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public void FireTank(int index, float angle){
-        if (index >= _tanks.Count) return;
-        _tanks[index].GetComponent<TankManager>().Fire(angle);
+        if (!_tanks.ContainsKey(index)) return;
+        _tanks[index].Fire(angle);
     }
 
     public void MoveTank(int index, Vector3 position){
-        if (index >= _tanks.Count) return;
-        _tanks[index].GetComponent<TankManager>().SetPosition(position);
+        if (!_tanks.ContainsKey(index)) return;
+        _tanks[index].SetPosition(position);
     }
 
     public void SetTankTurret(int index, float angle){
-        if (index >= _tanks.Count) return;
-        _tanks[index].GetComponent<TankManager>().SetTurretAngle(angle);
-    }
-
-    public int GetTankIndex(int id){
-        for(int i = 0; i < _tanks.Count; i++){
-            if (_tanks[i].GetComponent<TankManager>().tankInfo.id == id){
-                return i;
-            }
-        }
-        return -1;
+        if (!_tanks.ContainsKey(index)) return;
+        _tanks[index].SetTurretAngle(angle);
     }
 
     public void TankDie(int index){
         if (index >= _tanks.Count) return;
-        _tanks[index].GetComponent<TankManager>().Die();
+        _tanks[index].Die();
     }
 
     public void Hit(int fromId, int toId){
-        int sourceIndex = GetTankIndex(fromId);
-        int desIndex = GetTankIndex(toId);
 
-        TankInfo sourceInfo = GetTankInfo(sourceIndex);
-        TankInfo desInfo = GetTankInfo(desIndex);
-        // Debug.Log(desInfo.HP);
+        TankInfo sourceInfo = GetTankInfo(fromId);
+        TankInfo desInfo = GetTankInfo(toId);
 
         if (sourceInfo.damage >= desInfo.HP){
-            TankDie(desIndex);
+            TankDie(toId);
         }
 
         // desInfo.HP -= sourceInfo.damage;
-        _tanks[desIndex].GetComponent<TankManager>().SetHP(desInfo.HP - sourceInfo.damage);
+        _tanks[toId].SetHP(desInfo.HP - sourceInfo.damage);
     }
 }
