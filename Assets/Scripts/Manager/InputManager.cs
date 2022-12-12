@@ -40,9 +40,9 @@ public class InputManager : MonoSingleton<InputManager>
     {
         float verticalInput = Input.GetAxisRaw("Vertical");
         float horizontalInput = Input.GetAxisRaw("Horizontal");
-        Vector3 moveDir = new Vector3(horizontalInput, 0, verticalInput) * Time.deltaTime * speed;
+        Vector3 moveInput = new Vector3(horizontalInput, 0, verticalInput);
         //moveDir = Quaternion.Euler(0, mainTankInfo.hullAngle, 0) * moveDir;
 
-        GameManager.Instance.MoveMainTank(mainTankInfo.position + moveDir);
+        GameManager.Instance.MoveMainTank(moveInput);
     }
 }

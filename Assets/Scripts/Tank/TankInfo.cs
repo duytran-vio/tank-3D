@@ -5,7 +5,7 @@ using UnityEngine;
 public class TankInfo
 {
     public int id;
-    public Vector3 position;
+    public Vector3 movementInput;
     public float hullAngle;
     public float turretAngle;
     public int HP;

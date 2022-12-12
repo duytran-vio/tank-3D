@@ -18,19 +18,24 @@ public class TankMovement : MonoBehaviour
         navMeshAgent.angularSpeed = rotateSpeed;
     }
 
-    public void HandleMovementToPosition(Vector3 targetPosition)
+    public void HandleMovement(Vector3 moveInput)
     {
-        Vector3 _moveDirection = targetPosition - transform.position;
+        //Vector3 _moveDirection = moveInput - transform.position;
         //    if (Vector3.Distance(targetPosition, transform.position) < 0.1f) return;
-        _moveDirection.y = 0;
-        Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime * speed);
-        Vector3 movement = Vector3.Lerp(Vector3.zero, targetPosition - transform.position, Time.fixedDeltaTime * speed);
-        navMeshAgent.Move(movement);
-        //transform.position = newPosition;
-        _moveDirection.Normalize();
-        HandleRotation(_moveDirection);
+        //_moveDirection.y = 0;
+
+        Vector3 movement = Vector3.Lerp(Vector3.zero, moveInput.normalized, Time.fixedDeltaTime * speed);
+        movement = transform.InverseTransformVector(movement);
+
+        Debug.DrawRay(transform.position, movement * 4f, Color.black);
+
+        HandleRotation(moveInput.normalized);
 
         navMeshAgent.Move(movement);
+
+        //_moveDirection.Normalize();
+        HandleRotation(moveInput);
+
     }
 
     public void HandleTurretAngle(float r)
@@ -43,7 +48,7 @@ public class TankMovement : MonoBehaviour
     private void HandleRotation(Vector3 _moveDirection)
     {
         if (_moveDirection.magnitude == 0) return;
-        Quaternion targetRotation = Quaternion.LookRotation(_moveDirection, Vector3.up);
+        Quaternion targetRotation = Quaternion.LookRotation( _moveDirection, Vector3.up);
         Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
         transform.rotation = newRotation;
     }
