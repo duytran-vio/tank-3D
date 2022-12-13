@@ -25,19 +25,19 @@ public class BotController : MonoBehaviour
     {
         FindTargetNode findTargetNode = nodeFactory.FindTargetNode(10f) as FindTargetNode;
 
-        RangeNode fireRangeNode = nodeFactory.RangeNode(5f) as RangeNode;
+        RangeNode fireRangeNode = nodeFactory.RangeNode(7f) as RangeNode;
         DeviationNode fireDeviationNode = nodeFactory.DeviationNode(2f) as DeviationNode;
-        ShootNode fireActionNode = nodeFactory.ShootNode(0.5f) as ShootNode;
+        ShootNode fireActionNode = nodeFactory.ShootNode(1f) as ShootNode;
         Sequence fireActionGroupNode = nodeFactory.Sequence(new List<Node>() { fireRangeNode, fireDeviationNode, fireActionNode }) as Sequence;
 
-        RangeNode aimRangeNode = nodeFactory.RangeNode(6f) as RangeNode;
+        RangeNode aimRangeNode = nodeFactory.RangeNode(8f) as RangeNode;
         AimAtTargetNode aimAtTargetNode = nodeFactory.AimAtTargetNode() as AimAtTargetNode;
         Sequence aimActionGroupNode = nodeFactory.Sequence(new List<Node>() { aimRangeNode, aimAtTargetNode }) as Sequence;
 
         RangeNode chaseRangeNode = nodeFactory.RangeNode(4f) as RangeNode;
-        Inverter rangeNode2Inverted = nodeFactory.Inverter(chaseRangeNode) as Inverter;
+        Inverter chaseRangeInverted = nodeFactory.Inverter(chaseRangeNode) as Inverter;
         ChaseNode chaseNode = nodeFactory.ChaseNode(4f) as ChaseNode;
-        Sequence chaseActionGroupNode = nodeFactory.Sequence(new List<Node>() { rangeNode2Inverted, chaseNode }) as Sequence;
+        Sequence chaseActionGroupNode = nodeFactory.Sequence(new List<Node>() { chaseRangeInverted, chaseNode }) as Sequence;
 
         Selector actionSelectionNode = nodeFactory.Selector(new List<Node>() { fireActionGroupNode, aimActionGroupNode, chaseActionGroupNode }) as Selector;
 

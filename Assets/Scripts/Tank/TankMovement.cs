@@ -16,6 +16,7 @@ public class TankMovement : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = speed;
         navMeshAgent.angularSpeed = rotateSpeed;
+        navMeshAgent.updateRotation = true;
     }
 
     public void HandleMovement(Vector3 moveInput)
@@ -24,14 +25,15 @@ public class TankMovement : MonoBehaviour
         //    if (Vector3.Distance(targetPosition, transform.position) < 0.1f) return;
         //_moveDirection.y = 0;
 
-        Vector3 movement = Vector3.Lerp(Vector3.zero, moveInput.normalized, Time.fixedDeltaTime * speed);
+        if (moveInput == Vector3.zero) return;
+        Vector3 movement = Vector3.Lerp(Vector3.zero, moveInput, Time.fixedDeltaTime * speed);
         movement = transform.TransformVector(movement);
 
-        Debug.DrawRay(transform.position, movement * 4f, Color.black);
 
-        HandleRotation(moveInput.normalized);
+        //HandleRotation(moveInput.normalized);
 
         navMeshAgent.Move(movement);
+        HandleRotation(moveInput.normalized);
 
         //_moveDirection.Normalize();
 

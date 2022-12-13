@@ -7,13 +7,15 @@ public class GameManager : MonoSingleton<GameManager>
     private Dictionary<int, TankManager> _tanks;
     private int mainTankIndex;
 
+    public Dictionary<int, TankManager> TanksInScene => _tanks;
+
     void Start()
     {
         _tanks = new Dictionary<int, TankManager>();
         AddNewTank(Vector3.zero);
         mainTankIndex = 0;
         Init();
-        BotManager.Instance.SetTankAsBot(AddNewTank(new Vector3(-5, 0, -5))); // test
+        BotManager.Instance.SetTankAsBot(AddNewTank()); // test
     }
 
     void Init()
