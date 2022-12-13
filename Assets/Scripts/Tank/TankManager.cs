@@ -9,19 +9,26 @@ public class TankManager : MonoBehaviour
     private TankMovement tankMovement;
     private GameObject bulletPrefabs;
     private Transform firePoint;
-    private Slider  healthBar;
+    private Slider healthBar;
     // Start is called before the first frame update
     void Awake()
     {
-        tankMovement = GetComponent<TankMovement>(); 
+        tankMovement = GetComponent<TankMovement>();
         bulletPrefabs = Resources.Load<GameObject>("Prefabs/Shell");
         firePoint = transform.Find("TankRenderers/TankTurret/FirePoint");
         healthBar = transform.Find("Canvas/HealthBar").GetComponent<Slider>();
     }
 
-    public void Init(int id){
-        tankInfo = new TankInfo(id);
-        tankInfo.position = transform.position;
+    public void Init(int id)
+    {
+        tankInfo = new TankInfo
+        {
+            id = id,
+            position = transform.position,
+            turretAngle = 0,
+            HP = initHP,
+            damage = initDamage
+        };
         healthBar.maxValue = tankInfo.HP;
         healthBar.value = tankInfo.HP;
     }
@@ -29,45 +36,52 @@ public class TankManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        tankMovement.HandleMovementToPosition(tankInfo.position);
+        tankMovement.HandleMovement(tankInfo.position);
         tankMovement.HandleTurretAngle(tankInfo.turretAngle);
     }
 
-    public void SetPosition(Vector3 position){
-        tankInfo.position = position;
+    public void SetMovementInput(Vector3 movementInput)
+    {
+        tankInfo.position = movementInput;
     }
 
-    public void SetTurretAngle(float angle){
+    public void SetTurretAngle(float angle)
+    {
         tankInfo.turretAngle = angle;
     }
 
-    public void Fire(float angle){
+    public void Fire(float angle)
+    {
         SetTurretAngle(angle);
         // StartCoroutine(OnReleaseBullet(tankInfo.turretAngle));
         GameObject bullet = Instantiate(bulletPrefabs, firePoint.position, tankMovement.GetTurretRotation());
         bullet.GetComponent<BulletManager>().Init(tankInfo.id);
     }
 
-    public IEnumerator OnReleaseBullet(float targetAngle){
-        float angle = 0; 
-        do {
+    public IEnumerator OnReleaseBullet(float targetAngle)
+    {
+        float angle = 0;
+        do
+        {
             angle = Quaternion.Angle(tankMovement.GetTurretRotation(), Quaternion.Euler(0, targetAngle, 0));
-            if (angle >= 0.5f) 
+            if (angle >= 0.5f)
                 yield return null;
-            else 
+            else
                 break;
-        }while (true);
-        
+        } while (true);
+
         GameObject bullet = Instantiate(bulletPrefabs, firePoint.position, tankMovement.GetTurretRotation());
         bullet.GetComponent<BulletManager>().Init(tankInfo.id);
     }
 
-    public void SetHP(int newHP){
+    public void SetHP(int newHP)
+    {
         tankInfo.HP = newHP;
         healthBar.value = newHP;
     }
 
-    public void Die(){
+    public void Die()
+    {
         Destroy(gameObject);
     }
 
