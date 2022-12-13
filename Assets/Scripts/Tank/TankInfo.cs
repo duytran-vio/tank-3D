@@ -10,6 +10,8 @@ public class TankInfo
     public int HP;
     public int damage;
 
+    public TankInfo(){}
+
     public TankInfo (int newId){
         id = newId;
         position = Vector3.zero;

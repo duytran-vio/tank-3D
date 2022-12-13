@@ -26,8 +26,8 @@ public class TankManager : MonoBehaviour
             id = id,
             position = transform.position,
             turretAngle = 0,
-            HP = initHP,
-            damage = initDamage
+            HP = Config.TankHP,
+            damage = Config.TankDamage
         };
         healthBar.maxValue = tankInfo.HP;
         healthBar.value = tankInfo.HP;

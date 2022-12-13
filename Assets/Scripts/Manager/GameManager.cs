@@ -28,7 +28,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    void Init()
+    public void Init()
     {
         InputManager.Instance.Init(GetMainTankInfo());
         CameraManager.Instance.Init(_tanks[mainTankIndex].transform);
