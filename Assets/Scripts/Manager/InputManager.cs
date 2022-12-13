@@ -22,7 +22,7 @@ public class InputManager : MonoSingleton<InputManager>
     void Update()
     {
         HandleMovementInput();
-        if (Input.GetKey(KeyCode.K))
+        if (Input.GetKey(KeyCode.J))
         {
             GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle - turretSpeed);
         }
@@ -30,7 +30,7 @@ public class InputManager : MonoSingleton<InputManager>
         {
             GameManager.Instance.SetMainTankTurret(mainTankInfo.turretAngle + turretSpeed);
         }
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.K))
         {
             GameManager.Instance.FireMainTank(mainTankInfo.turretAngle);
         }
