@@ -27,9 +27,9 @@ public class NodeFactory
         return new Inverter(node);
     }
 
-    public Node ChaseNode()
+    public Node ChaseNode(float stoppingDistance)
     {
-        return new ChaseNode(ref _context);
+        return new ChaseNode(stoppingDistance, ref _context);
     }
 
     public Node FindTargetNode(float searchRadius)

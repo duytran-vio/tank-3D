@@ -13,7 +13,7 @@ public class GameManager : MonoSingleton<GameManager>
         AddNewTank(Vector3.zero);
         mainTankIndex = 0;
         Init();
-        //BotManager.Instance.SetTankAsBot(AddNewTank(new Vector3(-5, 0, -5))); // test
+        BotManager.Instance.SetTankAsBot(AddNewTank(new Vector3(-5, 0, -5))); // test
     }
 
     void Init()

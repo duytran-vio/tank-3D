@@ -17,14 +17,14 @@ public class BotController : MonoBehaviour
             agent = tankManager.GetComponent<NavMeshAgent>()
         };
         nodeFactory = new NodeFactory(ref nodeContext);
-        nodeContext.agent.updatePosition = false;
+        //nodeContext.agent.updatePosition = false;
         ConstructBehaviourTree();
     }
 
     private void ConstructBehaviourTree()
     {
         FindTargetNode findTargetNode = nodeFactory.FindTargetNode(10f) as FindTargetNode;
-        ChaseNode chaseNode = nodeFactory.ChaseNode() as ChaseNode;
+        ChaseNode chaseNode = nodeFactory.ChaseNode(4f) as ChaseNode;
         Sequence chaseActionGroupNode = nodeFactory.Sequence(new List<Node>() { findTargetNode, chaseNode }) as Sequence;
         topBehaviourNode = nodeFactory.Selector(new List<Node>() { chaseActionGroupNode });
     }
