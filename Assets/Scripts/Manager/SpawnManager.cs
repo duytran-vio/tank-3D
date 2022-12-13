@@ -37,6 +37,12 @@ public class SpawnManager : MonoSingleton<SpawnManager>
 
     public Transform SpawnTank()
     {
+        TankInfo mainTankInfo = GameManager.Instance.GetMainTankInfo();
+        Vector3 spawnPos;
+        do
+        {
+            spawnPos = spawnPoint.GetSpawnPosition(2f);
+        } while (Vector3.Magnitude(mainTankInfo.position - spawnPos) < 2f);
         return SpawnTank(spawnPoint.GetSpawnPosition(2f));
     }
 }

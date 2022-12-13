@@ -14,7 +14,6 @@ public class BotController : MonoBehaviour
         nodeContext = new NodeContext()
         {
             manager = tankManager,
-            agent = tankManager.GetComponent<NavMeshAgent>()
         };
         nodeFactory = new NodeFactory(ref nodeContext);
         //nodeContext.agent.updatePosition = false;
@@ -23,20 +22,20 @@ public class BotController : MonoBehaviour
 
     private void ConstructBehaviourTree()
     {
-        FindTargetNode findTargetNode = nodeFactory.FindTargetNode(10f) as FindTargetNode;
+        FindTargetNode findTargetNode = nodeFactory.FindTargetNode(20f) as FindTargetNode;
 
-        RangeNode fireRangeNode = nodeFactory.RangeNode(7f) as RangeNode;
+        RangeNode fireRangeNode = nodeFactory.RangeNode(12f) as RangeNode;
         DeviationNode fireDeviationNode = nodeFactory.DeviationNode(2f) as DeviationNode;
         ShootNode fireActionNode = nodeFactory.ShootNode(1f) as ShootNode;
         Sequence fireActionGroupNode = nodeFactory.Sequence(new List<Node>() { fireRangeNode, fireDeviationNode, fireActionNode }) as Sequence;
 
-        RangeNode aimRangeNode = nodeFactory.RangeNode(8f) as RangeNode;
+        RangeNode aimRangeNode = nodeFactory.RangeNode(12f) as RangeNode;
         AimAtTargetNode aimAtTargetNode = nodeFactory.AimAtTargetNode() as AimAtTargetNode;
         Sequence aimActionGroupNode = nodeFactory.Sequence(new List<Node>() { aimRangeNode, aimAtTargetNode }) as Sequence;
 
         RangeNode chaseRangeNode = nodeFactory.RangeNode(4f) as RangeNode;
         Inverter chaseRangeInverted = nodeFactory.Inverter(chaseRangeNode) as Inverter;
-        ChaseNode chaseNode = nodeFactory.ChaseNode(4f) as ChaseNode;
+        ChaseNode chaseNode = nodeFactory.ChaseNode() as ChaseNode;
         Sequence chaseActionGroupNode = nodeFactory.Sequence(new List<Node>() { chaseRangeInverted, chaseNode }) as Sequence;
 
         Selector actionSelectionNode = nodeFactory.Selector(new List<Node>() { fireActionGroupNode, aimActionGroupNode, chaseActionGroupNode }) as Selector;
@@ -51,7 +50,6 @@ public class BotController : MonoBehaviour
 
     private void Update()
     {
-        nodeContext.manager.tankInfo.movementInput = Vector3.zero;
         topBehaviourNode.Evaluate();
     }
 }

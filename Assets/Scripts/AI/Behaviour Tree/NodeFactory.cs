@@ -27,9 +27,9 @@ public class NodeFactory
         return new Inverter(node);
     }
 
-    public Node ChaseNode(float stoppingDistance)
+    public Node ChaseNode()
     {
-        return new ChaseNode(stoppingDistance, ref _context);
+        return new ChaseNode(ref _context);
     }
 
     public Node FindTargetNode(float searchRadius)
@@ -61,7 +61,6 @@ public class NodeFactory
 [System.Serializable]
 public class NodeContext
 {
-    public NavMeshAgent agent;
     public TankManager manager;
     public Transform currentTarget;
     public float timeSinceLastFire;

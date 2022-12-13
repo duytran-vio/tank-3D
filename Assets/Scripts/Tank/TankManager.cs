@@ -26,9 +26,8 @@ public class TankManager : MonoBehaviour
         tankInfo = new TankInfo
         {
             id = id,
-            movementInput = transform.position,
+            position = transform.position,
             turretAngle = 0,
-            hullAngle = transform.rotation.eulerAngles.y,
             HP = initHP,
             damage = initDamage
         };
@@ -39,15 +38,13 @@ public class TankManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        tankMovement.HandleMovement(tankInfo.movementInput);
+        tankMovement.HandleMovement(tankInfo.position);
         tankMovement.HandleTurretAngle(tankInfo.turretAngle);
-
-        tankInfo.hullAngle = transform.rotation.eulerAngles.y;
     }
 
     public void SetMovementInput(Vector3 movementInput)
     {
-        tankInfo.movementInput = movementInput;
+        tankInfo.position = movementInput;
     }
 
     public void SetTurretAngle(float angle)

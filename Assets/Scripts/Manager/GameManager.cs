@@ -15,7 +15,7 @@ public class GameManager : MonoSingleton<GameManager>
         AddNewTank(Vector3.zero);
         mainTankIndex = 0;
         Init();
-        BotManager.Instance.SetTankAsBot(AddNewTank()); // test
+        BotManager.Instance.SetTankAsBot(AddNewTank(new Vector3(-8f, 0, -8f))); // test
     }
 
     void Init()
@@ -59,9 +59,9 @@ public class GameManager : MonoSingleton<GameManager>
         return _tanks[index].tankInfo;
     }
 
-    public void MoveMainTank(Vector3 moveInput)
+    public void MoveMainTank(Vector3 position)
     {
-        MoveTank(mainTankIndex, moveInput);
+        MoveTank(mainTankIndex, position);
     }
 
     public void SetMainTankTurret(float angle)
@@ -80,10 +80,10 @@ public class GameManager : MonoSingleton<GameManager>
         _tanks[index].Fire(angle);
     }
 
-    public void MoveTank(int index, Vector3 moveInput)
+    public void MoveTank(int index, Vector3 position)
     {
         if (!_tanks.ContainsKey(index)) return;
-        _tanks[index].SetMovementInput(moveInput);
+        _tanks[index].SetMovementInput(position);
     }
 
     public void SetTankTurret(int index, float angle)

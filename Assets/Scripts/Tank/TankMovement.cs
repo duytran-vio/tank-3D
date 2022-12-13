@@ -9,33 +9,19 @@ public class TankMovement : MonoBehaviour
     public float rotateSpeed;
     public float turretRotateSpeed;
     private Transform tankTurret;
-    private NavMeshAgent navMeshAgent;
     void Awake()
     {
         tankTurret = transform.Find("TankRenderers/TankTurret");
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.speed = speed;
-        navMeshAgent.angularSpeed = rotateSpeed;
-        navMeshAgent.updateRotation = true;
     }
 
-    public void HandleMovement(Vector3 moveInput)
+    public void HandleMovement(Vector3 targetPosition)
     {
-        //Vector3 _moveDirection = moveInput - transform.position;
-        //    if (Vector3.Distance(targetPosition, transform.position) < 0.1f) return;
-        //_moveDirection.y = 0;
-
-        if (moveInput == Vector3.zero) return;
-        Vector3 movement = Vector3.Lerp(Vector3.zero, moveInput, Time.fixedDeltaTime * speed);
-        movement = transform.TransformVector(movement);
-
-
-        //HandleRotation(moveInput.normalized);
-
-        navMeshAgent.Move(movement);
-        HandleRotation(moveInput.normalized);
-
-        //_moveDirection.Normalize();
+        Vector3 _moveDirection = targetPosition - transform.position;
+        _moveDirection.y = 0;
+        Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * speed);
+        transform.position = newPosition;
+        _moveDirection.Normalize();
+        HandleRotation(_moveDirection);
 
     }
 
@@ -49,8 +35,7 @@ public class TankMovement : MonoBehaviour
     private void HandleRotation(Vector3 moveDirection)
     {
         if (moveDirection.magnitude == 0) return;
-
-        Quaternion targetRotation = Quaternion.LookRotation(transform.TransformDirection(moveDirection), Vector3.up);
+        Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
         Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
         transform.rotation = newRotation;
     }

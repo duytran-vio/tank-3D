@@ -742,7 +742,6 @@ GameObject:
   - component: {fileID: 2318757325395371040}
   - component: {fileID: 2318757325395371037}
   - component: {fileID: 2318757325395371038}
-  - component: {fileID: 3560027768066703097}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Tank
@@ -825,28 +824,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initHP: 5
   initDamage: 1
---- !u!195 &3560027768066703097
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8987428986398687062}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 1.45
-  m_Speed: 5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 3
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1.9
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &8987428986398687066
 GameObject:
   m_ObjectHideFlags: 0

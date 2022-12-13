@@ -7,13 +7,11 @@ public class ChaseNode : Node
 {
     NodeContext context;
     NavMeshPath path;
-    float stoppingDistance;
 
-    public ChaseNode(float stoppingDistance, ref NodeContext context)
+    public ChaseNode(ref NodeContext context)
     {
         this.context = context;
         path = new NavMeshPath();
-        this.stoppingDistance = stoppingDistance;
     }
 
     public override NodeState Evaluate()
@@ -24,30 +22,16 @@ public class ChaseNode : Node
         }
         else
         {
-            float distance = Vector3.Distance(context.currentTarget.position, context.agent.transform.position);
-            if (distance > stoppingDistance)
-            {
-                //context.agent.isStopped = false;
-                //context.agent.destination = context.currentTarget.position;
+            NavMesh.CalculatePath(context.manager.transform.position, context.currentTarget.position, NavMesh.AllAreas, path);
 
-                NavMesh.CalculatePath(context.manager.transform.position, context.currentTarget.position, NavMesh.AllAreas, path);
+            Debug.DrawLine(context.manager.tankInfo.position + Vector3.up, path.corners[1] + Vector3.up, Color.red);
+            Vector3 direction = path.corners[1] - context.manager.tankInfo.position;
+            direction = Vector3.ClampMagnitude(direction, InputManager.Instance.speed * Time.fixedDeltaTime);
 
-                Debug.DrawLine(context.manager.transform.position, path.corners[0], Color.red);
-                Vector3 direction = path.corners[1] - context.manager.transform.position;
-                direction = context.manager.transform.InverseTransformVector(direction);
-                direction.Normalize();
-                direction.y = 0;
+            Debug.DrawRay(context.manager.tankInfo.position + Vector3.up, direction, Color.blue);
 
-                context.manager.tankInfo.movementInput = direction;
-                _nodeState = NodeState.RUNNING;
-            }
-            else
-            {
-                //context.agent.isStopped = true;
-                //context.agent.ResetPath();
-                context.manager.tankInfo.movementInput = Vector3.zero;
-                _nodeState = NodeState.SUCCESS;
-            }
+            context.manager.tankInfo.position = direction + context.manager.tankInfo.position;
+            _nodeState = NodeState.RUNNING;
         }
 
         return _nodeState;
