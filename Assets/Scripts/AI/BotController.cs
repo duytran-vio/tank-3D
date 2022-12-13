@@ -17,6 +17,7 @@ public class BotController : MonoBehaviour
             agent = tankManager.GetComponent<NavMeshAgent>()
         };
         nodeFactory = new NodeFactory(ref nodeContext);
+        nodeContext.agent.updatePosition = false;
         ConstructBehaviourTree();
     }
 

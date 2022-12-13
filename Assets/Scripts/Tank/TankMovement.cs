@@ -25,7 +25,7 @@ public class TankMovement : MonoBehaviour
         //_moveDirection.y = 0;
 
         Vector3 movement = Vector3.Lerp(Vector3.zero, moveInput.normalized, Time.fixedDeltaTime * speed);
-        movement = transform.InverseTransformVector(movement);
+        movement = transform.TransformVector(movement);
 
         Debug.DrawRay(transform.position, movement * 4f, Color.black);
 
@@ -34,7 +34,6 @@ public class TankMovement : MonoBehaviour
         navMeshAgent.Move(movement);
 
         //_moveDirection.Normalize();
-        HandleRotation(moveInput);
 
     }
 
@@ -45,10 +44,11 @@ public class TankMovement : MonoBehaviour
         tankTurret.rotation = targetRotation;
     }
 
-    private void HandleRotation(Vector3 _moveDirection)
+    private void HandleRotation(Vector3 moveDirection)
     {
-        if (_moveDirection.magnitude == 0) return;
-        Quaternion targetRotation = Quaternion.LookRotation( _moveDirection, Vector3.up);
+        if (moveDirection.magnitude == 0) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(transform.TransformDirection(moveDirection), Vector3.up);
         Quaternion newRotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
         transform.rotation = newRotation;
     }
