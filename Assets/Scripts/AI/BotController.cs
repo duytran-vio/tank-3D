@@ -24,12 +24,12 @@ public class BotController : MonoBehaviour
     {
         FindTargetNode findTargetNode = nodeFactory.FindTargetNode(20f) as FindTargetNode;
 
-        RangeNode fireRangeNode = nodeFactory.RangeNode(12f) as RangeNode;
+        RangeNode fireRangeNode = nodeFactory.RangeNode(6f) as RangeNode;
         DeviationNode fireDeviationNode = nodeFactory.DeviationNode(2f) as DeviationNode;
         ShootNode fireActionNode = nodeFactory.ShootNode(1f) as ShootNode;
         Sequence fireActionGroupNode = nodeFactory.Sequence(new List<Node>() { fireRangeNode, fireDeviationNode, fireActionNode }) as Sequence;
 
-        RangeNode aimRangeNode = nodeFactory.RangeNode(12f) as RangeNode;
+        RangeNode aimRangeNode = nodeFactory.RangeNode(8f) as RangeNode;
         AimAtTargetNode aimAtTargetNode = nodeFactory.AimAtTargetNode() as AimAtTargetNode;
         Sequence aimActionGroupNode = nodeFactory.Sequence(new List<Node>() { aimRangeNode, aimAtTargetNode }) as Sequence;
 
